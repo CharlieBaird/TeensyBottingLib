@@ -5,6 +5,9 @@ import com.charliebaird.InputCodes.MouseCode;
 
 import java.awt.*;
 
+// MK260 Wireless Combo Receiver
+// Spoof real PID and VID at C:\Users\charl\AppData\Local\Arduino15\packages\teensy\hardware\avr\1.59.0\cores\teensy4
+
 public class Main
 {
     public static void main(String[] args)

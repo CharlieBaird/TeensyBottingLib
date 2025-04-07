@@ -33,6 +33,32 @@ Others:
 - `KEY PRESS LSHIFT`
 - etc.
 
+## Teensy as a Spoof Keyboard/Mouse
+
+Use ArduinoIDE with Teensyduino extension.
+
+To spoof a real keyboard/mouse, find a known `VENDOR_ID` and `PRODUCT_ID` and replace the teensy ones in `...arduino/packages/teensy/hardware/avr/[version]/cores/teensy4/usb_desc.h` using your configuration. If you're using `SERIAL+KEYBOARD+MOUSE+JOYSTICK`, change the values under `USB_SERIAL_HID`.
+
+Further, change the `MANUFACTURER_NAME` and `PRODUCT_NAME` to something realistic (Razer, Logitech, etc., and one of their products)
+
+Finally, change the serial number in `usb_desc.c` to a random 8–16 character alphanumeric string by changing the following:
+```c
+struct usb_string_descriptor_struct usb_string_serial_number = {
+      sizeof(struct {
+          uint8_t bLength;
+          uint8_t bDescriptorType;
+          uint16_t wString[8];
+      }),
+      3,
+      {'5','1','A','6','2','4','B','4'}
+  };
+```
+
+
+Restart your ArduinoIDE and relaunch your code onto your Teensy. Look in regedit (`HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Enum/USB/` for a device of your `VENDOR_ID` and `PRODUCT_ID`)
+
+Alternatively, use `USBDeview` to more easily look at your USB devices to see if the spoof worked properly.
+
 ## Notes
 
 Uses (NaturalMouseMotion)[https://github.com/JoonasVali/NaturalMouseMotion] to generate human-like mouse movement.
