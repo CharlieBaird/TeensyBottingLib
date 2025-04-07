@@ -11,12 +11,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+
 public class MouseMotion
 {
     private MouseMotionFactory factory;
+    private TeensyController teensyController;
 
     public MouseMotion(TeensyController teensyController)
     {
+        this.teensyController = teensyController;
+
         MouseMotionFactory factory = new MouseMotionFactory(new DefaultMouseMotionNature());
         List<Flow> flows = new ArrayList<>(Arrays.asList(
                 new Flow(FlowTemplates.variatingFlow()),
@@ -30,7 +36,7 @@ public class MouseMotion
         factory.setNoiseProvider(new DefaultNoiseProvider(DefaultNoiseProvider.DEFAULT_NOISINESS_DIVIDER));
         factory.getNature().setReactionTimeVariationMs(0);
         factory.getNature().setSystemCalls(new TeensySystemCalls(this, teensyController));
-        factory.getNature().setMouseInfo(new TeensyMouseAccessor(this));
+        factory.getNature().setMouseInfo(new TeensyMouseAccessor());
         manager.setMouseMovementBaseTimeMs(250);
 
         DefaultOvershootManager overshootManager = (DefaultOvershootManager) factory.getOvershootManager();
@@ -41,16 +47,8 @@ public class MouseMotion
         this.factory = factory;
     }
 
-    public int curX;
-    public int curY;
-
     public void move(int x, int y)
     {
-        Point currentPos = MouseInfo.getPointerInfo().getLocation();
-
-        curX = currentPos.x;
-        curY = currentPos.y;
-
         try {
             factory.move(x, y);
         } catch (InterruptedException e) {
@@ -61,18 +59,12 @@ public class MouseMotion
 
 class TeensyMouseAccessor implements MouseInfoAccessor
 {
-    private MouseMotion mouseMotion;
-
-    public TeensyMouseAccessor(MouseMotion mouseMotion)
-    {
-        this.mouseMotion = mouseMotion;
-    }
-
     @Override
     public Point getMousePosition()
     {
-        Point currentPos = MouseInfo.getPointerInfo().getLocation();
-        return currentPos;
+        WinDef.POINT point = new WinDef.POINT();
+        User32.INSTANCE.GetCursorPos(point);
+        return new Point(point.x, point.y);
     }
 }
 
@@ -106,45 +98,14 @@ class TeensySystemCalls implements SystemCalls
         return Toolkit.getDefaultToolkit().getScreenSize();
     }
 
-    int curX;
-    int curY;
-    public void initMovement()
-    {
-
-    }
-
     static int i = 0;
 
     @Override
     public void setMousePosition(int x, int y)
     {
         System.out.println(i);
-        if (i++ == 100) System.exit(0);
+        if (i++ == 1000) System.exit(0);
 
         teensyController.mouseMove(x, y);
-
-        System.out.println("(" + x + ", " + y + ")");
-//
-//        Point currentPos = new Point(mouseMotion.curX, mouseMotion.curY);
-//        System.out.println("[DEBUG] Current position: (" + currentPos.x + ", " + currentPos.y + ")");
-//
-//        int dx = x - currentPos.x;
-//        int dy = y - currentPos.y;
-//
-//        mouseMotion.curX += dx;
-//        mouseMotion.curY += dy;
-//
-//        System.out.println("[DEBUG] Calculated delta: dx = " + dx + ", dy = " + dy);
-//
-//        System.out.println("[DEBUG] Sending command: MOUSE MOVE " + dx + " " + dy);
-//
-//        teensyController.mouseMove(dx, dy);
-//
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            System.err.println("[ERROR] Sleep interrupted");
-            throw new RuntimeException(e);
-        }
     }
 }

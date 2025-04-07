@@ -2,6 +2,7 @@ package com.charliebaird;
 
 import com.fazecast.jSerialComm.SerialPort;
 
+import java.awt.*;
 import java.io.PrintWriter;
 
 public class TeensyController {
@@ -55,8 +56,8 @@ public class TeensyController {
 
     // --- Convenience methods ---
 
-    public void mouseMove(int dx, int dy) {
-        sendCommand("MOUSE MOVE " + dx + " " + dy);
+    public void mouseMove(int x, int y) {
+        sendCommand("MOUSE MOVE " + x + " " + y);
     }
 
     public void mouseClick(String button) {
