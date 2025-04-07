@@ -6,16 +6,20 @@ public class Main
 {
     public static void main(String[] args) throws InterruptedException
     {
-        try {
-            SmartBot bot = SmartBot.getDefault(1);
+        TeensyBot teensyBot = new TeensyBot();
 
-            bot.mouseMoveGeneralLocation(new Point(500, 500));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            System.out.println("Test");
-        }
+        teensyBot.mouseMoveGeneralLocation(new Point(500, 500));
+
+        teensyBot.leftClick();
+//        teensyBot.keyClick("a");
+
+        teensyBot.keyPress(KeyCode.LSHIFT);
+        teensyBot.keyPress(KeyCode.A);
+        teensyBot.delayMS(1000);
+        teensyBot.keyRelease(KeyCode.A);
+        teensyBot.keyRelease(KeyCode.LSHIFT);
+
+//        bot.mouseMoveExactLocation(new Point(500, 500));
 
 //        teensy.mouseMove(50, 60);
 //        Thread.sleep(100);

@@ -5,7 +5,8 @@ import com.fazecast.jSerialComm.SerialPort;
 import java.awt.*;
 import java.io.PrintWriter;
 
-public class TeensyController {
+public class TeensyController
+{
     private SerialPort port;
     private PrintWriter writer;
 
@@ -26,7 +27,8 @@ public class TeensyController {
         this(getComForTeensy());
     }
 
-    public TeensyController(String portDescriptor) {
+    public TeensyController(String portDescriptor)
+    {
         port = SerialPort.getCommPort(portDescriptor);
         port.setBaudRate(115200);
         port.setNumDataBits(8);
@@ -42,12 +44,14 @@ public class TeensyController {
         }
     }
 
-    public void close() {
+    public void close()
+    {
         if (writer != null) writer.close();
         if (port != null && port.isOpen()) port.closePort();
     }
 
-    public void sendCommand(String command) {
+    public void sendCommand(String command)
+    {
         if (writer != null) {
             writer.println(command);
             writer.flush();
@@ -56,27 +60,28 @@ public class TeensyController {
 
     // --- Convenience methods ---
 
-    public void mouseMove(int x, int y) {
+    public void mouseMove(int x, int y)
+    {
         sendCommand("MOUSE MOVE " + x + " " + y);
     }
 
-    public void mouseClick(String button) {
-        sendCommand("MOUSE CLICK " + button.toLowerCase());
-    }
-
-    public void mousePress(String button) {
+    public void mousePress(String button)
+    {
         sendCommand("MOUSE PRESS " + button.toLowerCase());
     }
 
-    public void mouseRelease(String button) {
+    public void mouseRelease(String button)
+    {
         sendCommand("MOUSE RELEASE " + button.toLowerCase());
     }
 
-    public void keyPress(String key, String... modifiers) {
-        sendCommand("KEY PRESS " + String.join(" ", modifiers) + " " + key);
+    public void keyPress(String key)
+    {
+        sendCommand("KEY PRESS " + key);
     }
 
-    public void keyRelease(String key) {
+    public void keyRelease(String key)
+    {
         sendCommand("KEY RELEASE " + key);
     }
 }

@@ -14,26 +14,25 @@ import java.util.List;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 
-public class MouseMotion
+public class MouseMotionHandler
 {
-    private MouseMotionFactory factory;
+    private MouseMotionFactory generalLocationFactory;
+    private MouseMotionFactory exactLocationFactory;
+
     private TeensyController teensyController;
 
-    public MouseMotion(TeensyController teensyController)
+    private MouseMotionFactory getGeneralLocationFactory()
     {
-        this.teensyController = teensyController;
-
         MouseMotionFactory factory = new MouseMotionFactory(new DefaultMouseMotionNature());
         List<Flow> flows = new ArrayList<>(Arrays.asList(
                 new Flow(FlowTemplates.variatingFlow()),
-//                new Flow(FlowTemplates.slowStartupFlow()),
                 new Flow(FlowTemplates.slowStartup2Flow()),
                 new Flow(FlowTemplates.adjustingFlow()),
                 new Flow(FlowTemplates.jaggedFlow())
         ));
         DefaultSpeedManager manager = new DefaultSpeedManager(flows);
         factory.setDeviationProvider(new SinusoidalDeviationProvider(SinusoidalDeviationProvider.DEFAULT_SLOPE_DIVIDER));
-        factory.setNoiseProvider(new DefaultNoiseProvider(DefaultNoiseProvider.DEFAULT_NOISINESS_DIVIDER));
+        factory.setNoiseProvider(new DefaultNoiseProvider(20));
         factory.getNature().setReactionTimeVariationMs(0);
         factory.getNature().setSystemCalls(new TeensySystemCalls(this, teensyController));
         factory.getNature().setMouseInfo(new TeensyMouseAccessor());
@@ -44,13 +43,39 @@ public class MouseMotion
 
         factory.setSpeedManager(manager);
 
-        this.factory = factory;
+        return factory;
     }
 
-    public void move(int x, int y)
+    private MouseMotionFactory getExactLocationFactory()
+    {
+        MouseMotionFactory factory = getGeneralLocationFactory();
+        factory.getNature().setReactionTimeVariationMs(100);
+        DefaultOvershootManager overshootManager = (DefaultOvershootManager) factory.getOvershootManager();
+        overshootManager.setOvershoots(2);
+        return factory;
+    }
+
+    public MouseMotionHandler(TeensyController teensyController)
+    {
+        this.teensyController = teensyController;
+
+        this.generalLocationFactory = getGeneralLocationFactory();
+        this.exactLocationFactory = getExactLocationFactory();
+    }
+
+    public void mouseMoveGeneralLocation(int x, int y)
     {
         try {
-            factory.move(x, y);
+            generalLocationFactory.move(x, y);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void mouseMoveExactLocation(int x, int y)
+    {
+        try {
+            exactLocationFactory.move(x, y);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -70,13 +95,11 @@ class TeensyMouseAccessor implements MouseInfoAccessor
 
 class TeensySystemCalls implements SystemCalls
 {
-    MouseMotion mouseMotion;
     private TeensyController teensyController;
 
-    public TeensySystemCalls(MouseMotion mouseMotion, TeensyController teensyController)
+    public TeensySystemCalls(MouseMotionHandler mouseMotion, TeensyController teensyController)
     {
         super();
-        this.mouseMotion = mouseMotion;
         this.teensyController = teensyController;
     }
 
