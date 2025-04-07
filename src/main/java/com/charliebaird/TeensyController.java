@@ -2,7 +2,6 @@ package com.charliebaird;
 
 import com.fazecast.jSerialComm.SerialPort;
 
-import java.awt.*;
 import java.io.PrintWriter;
 
 public class TeensyController

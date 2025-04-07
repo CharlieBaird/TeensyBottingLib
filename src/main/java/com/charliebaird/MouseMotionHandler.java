@@ -2,17 +2,11 @@ package com.charliebaird;
 
 import com.github.joonasvali.naturalmouse.api.MouseInfoAccessor;
 import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
-import com.github.joonasvali.naturalmouse.api.SpeedManager;
 import com.github.joonasvali.naturalmouse.api.SystemCalls;
 import com.github.joonasvali.naturalmouse.support.*;
-import com.github.joonasvali.naturalmouse.util.FlowTemplates;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import com.github.joonasvali.naturalmouse.util.Pair;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 
