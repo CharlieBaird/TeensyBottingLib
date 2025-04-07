@@ -4,14 +4,14 @@ import java.awt.*;
 
 public class Main
 {
-    public static void main(String[] args) throws InterruptedException
+    public static void main(String[] args)
     {
         TeensyBot teensyBot = new TeensyBot();
 
         teensyBot.mouseMoveGeneralLocation(new Point(500, 500));
 
-        teensyBot.leftClick();
-//        teensyBot.keyClick("a");
+        teensyBot.mouseClick(MouseCode.LEFT);
+        teensyBot.keyClick(KeyCode.A);
 
         teensyBot.keyPress(KeyCode.LSHIFT);
         teensyBot.keyPress(KeyCode.A);

@@ -1,6 +1,9 @@
 package com.charliebaird;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TeensyBot
 {
@@ -11,6 +14,8 @@ public class TeensyBot
     {
         teensy = new TeensyController();
         mouseMotionHandler = new MouseMotionHandler(teensy);
+        HeldKeys = new HashSet<>();
+        HeldMouseClicks = new HashSet<>();
 
         // Make sure snippet runs to close connection to Teensy
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -22,11 +27,12 @@ public class TeensyBot
     public void delayMS(int ms)
     {
         int max = ms * 2;
-        int value = (int) Math.floor(Math.random()*(max- ms +1)+ ms);
+        int value = (int) Math.floor(Math.random() * (max - ms + 1) + ms);
 
         try {
             Thread.sleep(value);
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {
+        }
     }
 
     public void mouseMoveGeneralLocation(Point p)
@@ -39,41 +45,72 @@ public class TeensyBot
         mouseMotionHandler.mouseMoveExactLocation(p.x, p.y);
     }
 
-    public void leftClick()
+    private final Set<KeyCode> HeldKeys;
+    private final Set<MouseCode> HeldMouseClicks;
+
+
+    public void mouseClick(MouseCode mouseCode)
     {
-        teensy.mousePress("left");
-        delayMS(60);
-        teensy.mouseRelease("left");
+        String serial = mouseCode.getSerialValue();
+        if (!HeldMouseClicks.contains(mouseCode)) {
+            HeldMouseClicks.add(mouseCode);
+            teensy.mousePress(serial);
+            delayMS(60);
+            teensy.mouseRelease(serial);
+        }
+        else {
+            mouseRelease(mouseCode);
+        }
     }
 
-    public void rightClick()
+    public void mousePress(MouseCode mouseCode)
     {
-        teensy.mousePress("right");
-        delayMS(60);
-        teensy.mouseRelease("right");
+        String serial = mouseCode.getSerialValue();
+        if (!HeldMouseClicks.contains(mouseCode)) {
+            HeldMouseClicks.add(mouseCode);
+            teensy.mousePress(serial);
+        }
     }
 
-    public void middleClick()
+    public void mouseRelease(MouseCode mouseCode)
     {
-        teensy.mousePress("middle");
-        delayMS(60);
-        teensy.mouseRelease("middle");
+        String serial = mouseCode.getSerialValue();
+        if (HeldMouseClicks.contains(mouseCode)) {
+            HeldMouseClicks.remove(mouseCode);
+            teensy.mouseRelease(serial);
+        }
     }
 
-    public void keyClick(String key)
+    public void keyClick(KeyCode keyCode)
     {
-        teensy.keyPress(key);
-        delayMS(60);
-        teensy.keyRelease(key);
+        String serial = keyCode.getSerialValue();
+        if (!HeldKeys.contains(keyCode)) {
+            HeldKeys.add(keyCode);
+            teensy.keyPress(serial);
+            delayMS(60);
+            teensy.keyRelease(serial);
+            HeldKeys.remove(keyCode);
+        } else {
+            keyRelease(keyCode);
+        }
     }
 
-    public void keyPress(KeyCode key)
+    public void keyPress(KeyCode keyCode)
     {
-        teensy.keyPress(key.getSerialValue());
+        String serial = keyCode.getSerialValue();
+        if (!HeldKeys.contains(keyCode)) {
+            HeldKeys.add(keyCode);
+            teensy.keyPress(serial);
+        }
     }
 
-    public void keyRelease(KeyCode key)
+    public void keyRelease(KeyCode keyCode)
     {
-        teensy.keyRelease(key.getSerialValue());
+        String serial = keyCode.getSerialValue();
+        if (HeldKeys.contains(keyCode)) {
+            HeldKeys.remove(keyCode);
+            teensy.keyRelease(serial);
+        }
     }
+
 }
