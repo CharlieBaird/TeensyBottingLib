@@ -14,13 +14,16 @@ public class Main
         teensyBot.mouseMoveGeneralLocation(new Point(500, 500));
 
         teensyBot.mouseClick(MouseCode.LEFT);
-        teensyBot.keyClick(KeyCode.A);
 
-        teensyBot.keyPress(KeyCode.LSHIFT);
-        teensyBot.keyPress(KeyCode.A);
-        teensyBot.delayMS(1000);
-        teensyBot.keyRelease(KeyCode.A);
-        teensyBot.keyRelease(KeyCode.LSHIFT);
+        teensyBot.keyCombo(KeyCode.LCTRL, KeyCode.A);
+
+//        teensyBot.keyClick(KeyCode.A);
+//
+//        teensyBot.keyPress(KeyCode.LSHIFT);
+//        teensyBot.keyPress(KeyCode.A);
+//        teensyBot.delayMS(1000);
+//        teensyBot.keyRelease(KeyCode.A);
+//        teensyBot.keyRelease(KeyCode.LSHIFT);
 
 //        bot.mouseMoveExactLocation(new Point(500, 500));
 

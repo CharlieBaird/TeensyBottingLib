@@ -57,7 +57,7 @@ public class TeensyBot
         if (!HeldMouseClicks.contains(mouseCode)) {
             HeldMouseClicks.add(mouseCode);
             teensy.mousePress(serial);
-            delayMS(60);
+            delayMS(50);
             teensy.mouseRelease(serial);
         }
         else {
@@ -112,6 +112,21 @@ public class TeensyBot
         if (HeldKeys.contains(keyCode)) {
             HeldKeys.remove(keyCode);
             teensy.keyRelease(serial);
+        }
+    }
+
+    public void keyCombo(KeyCode... combo)
+    {
+        for (KeyCode key : combo) {
+            keyPress(key);
+            delayMS(80);
+        }
+
+        delayMS(60);
+
+        for (int i = combo.length - 1; i >= 0; i--) {
+            keyRelease(combo[i]);
+            delayMS(15);
         }
     }
 
