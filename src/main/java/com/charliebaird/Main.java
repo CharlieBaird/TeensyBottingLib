@@ -1,5 +1,8 @@
 package com.charliebaird;
 
+import com.charliebaird.InputCodes.KeyCode;
+import com.charliebaird.InputCodes.MouseCode;
+
 import java.awt.*;
 
 public class Main

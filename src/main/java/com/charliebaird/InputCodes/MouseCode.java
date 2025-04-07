@@ -1,4 +1,4 @@
-package com.charliebaird;
+package com.charliebaird.InputCodes;
 
 public enum MouseCode
 {
