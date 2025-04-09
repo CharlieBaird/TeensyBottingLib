@@ -1,4 +1,4 @@
-package com.charliebaird;
+package com.teensybottinglib;
 
 import com.fazecast.jSerialComm.SerialPort;
 

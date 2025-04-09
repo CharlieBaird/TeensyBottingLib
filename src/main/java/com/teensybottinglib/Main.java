@@ -1,7 +1,7 @@
-package com.charliebaird;
+package com.teensybottinglib;
 
-import com.charliebaird.InputCodes.KeyCode;
-import com.charliebaird.InputCodes.MouseCode;
+import com.teensybottinglib.InputCodes.KeyCode;
+import com.teensybottinglib.InputCodes.MouseCode;
 
 import java.awt.*;
 
