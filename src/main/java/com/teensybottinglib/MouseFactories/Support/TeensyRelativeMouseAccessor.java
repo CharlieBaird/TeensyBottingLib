@@ -1,4 +1,4 @@
-package com.charliebaird.MouseFactories.Support;
+package com.TeensyBottingLib.MouseFactories.Support;
 
 import com.github.joonasvali.naturalmouse.api.MouseInfoAccessor;
 

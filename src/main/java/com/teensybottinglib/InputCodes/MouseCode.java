@@ -1,4 +1,4 @@
-package com.teensybottinglib.InputCodes;
+package com.TeensyBottingLib.InputCodes;
 
 public enum MouseCode
 {

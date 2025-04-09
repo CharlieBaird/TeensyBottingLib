@@ -1,8 +1,8 @@
-package com.charliebaird.MouseFactories;
+package com.TeensyBottingLib.MouseFactories;
 
-import com.charliebaird.MouseFactories.Support.TeensyRelativeMouseAccessor;
-import com.charliebaird.MouseFactories.Support.TeensyRelativeSystemCalls;
-import com.charliebaird.TeensyIO;
+import com.TeensyBottingLib.MouseFactories.Support.TeensyRelativeMouseAccessor;
+import com.TeensyBottingLib.MouseFactories.Support.TeensyRelativeSystemCalls;
+import com.TeensyBottingLib.TeensyIO;
 import com.github.joonasvali.naturalmouse.support.DefaultOvershootManager;
 import com.github.joonasvali.naturalmouse.support.DefaultSpeedManager;
 

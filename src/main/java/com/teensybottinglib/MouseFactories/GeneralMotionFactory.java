@@ -1,4 +1,4 @@
-package com.charliebaird.MouseFactories;
+package com.TeensyBottingLib.MouseFactories;
 
 import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
 import com.github.joonasvali.naturalmouse.support.*;

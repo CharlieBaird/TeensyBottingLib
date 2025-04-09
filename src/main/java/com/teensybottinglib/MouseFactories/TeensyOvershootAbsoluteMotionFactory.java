@@ -1,8 +1,8 @@
-package com.charliebaird.MouseFactories;
+package com.TeensyBottingLib.MouseFactories;
 
-import com.charliebaird.MouseFactories.Support.TeensyAbsoluteMouseAccessor;
-import com.charliebaird.MouseFactories.Support.TeensyAbsoluteSystemCalls;
-import com.charliebaird.TeensyIO;
+import com.TeensyBottingLib.MouseFactories.Support.TeensyAbsoluteMouseAccessor;
+import com.TeensyBottingLib.MouseFactories.Support.TeensyAbsoluteSystemCalls;
+import com.TeensyBottingLib.TeensyIO;
 import com.github.joonasvali.naturalmouse.support.DefaultOvershootManager;
 
 public class TeensyOvershootAbsoluteMotionFactory extends GeneralTeensyMotionFactory
