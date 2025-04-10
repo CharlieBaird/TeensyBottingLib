@@ -1,44 +1,28 @@
 package com.TeensyBottingLib;
 
+import com.TeensyBottingLib.Utility.Timer;
+
 import java.awt.*;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        TeensyBot bot = new TeensyBot();
+        AsyncTeensyBot bot = new AsyncTeensyBot();
 
-        Runnable runnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                bot.mouseMoveGeneralLocation(new Point(500, 500));
-            }
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
+        Timer.start();
+        bot.mouseMoveGeneralLocation(new Point(500, 500), true);
+        Timer.stop();
 
         try {
-            Thread.sleep(400);
+            Thread.sleep(450);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        Runnable runnable2 = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                bot.mouseMoveGeneralLocation(new Point(1000, 1000));
-            }
-        };
+        bot.mouseMoveGeneralLocation(new Point(1000, 1000), true);
 
-        Thread thread2 = new Thread(runnable2);
-        thread2.start();
-
-        System.out.println("Test");
+        Timer.stop();
 
     }
 }
