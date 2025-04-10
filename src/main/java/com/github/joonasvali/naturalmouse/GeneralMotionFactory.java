@@ -1,7 +1,5 @@
-package com.TeensyBottingLib.MouseFactories.MotionFactories;
+package com.github.joonasvali.naturalmouse;
 
-import com.TeensyBottingLib.MouseFactories.AsyncMouseMotion;
-import com.github.joonasvali.naturalmouse.api.MouseMotion;
 import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
 import com.github.joonasvali.naturalmouse.support.*;
 import com.github.joonasvali.naturalmouse.util.FlowTemplates;
@@ -9,7 +7,7 @@ import com.github.joonasvali.naturalmouse.util.FlowTemplates;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class GeneralMotionFactory extends MouseMotionFactory
+public class GeneralMotionFactory extends MouseMotionFactory
 {
     ArrayList<Flow> flows = new ArrayList<>(Arrays.asList(
             new Flow(FlowTemplates.variatingFlow()),
@@ -27,16 +25,10 @@ public abstract class GeneralMotionFactory extends MouseMotionFactory
         getNature().setReactionTimeVariationMs(0);
 
         DefaultSpeedManager manager = new DefaultSpeedManager(flows);
-        manager.setMouseMovementBaseTimeMs(500);
+        manager.setMouseMovementBaseTimeMs(100000);
         setSpeedManager(manager);
 
         DefaultOvershootManager overshootManager = (DefaultOvershootManager) getOvershootManager();
         overshootManager.setOvershoots(0);
-    }
-
-    @Override
-    public MouseMotion build(int xDest, int yDest)
-    {
-        return new AsyncMouseMotion(getNature(), getRandom(), xDest, yDest);
     }
 }
