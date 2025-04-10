@@ -13,6 +13,9 @@ public class TeensyAbsoluteMouseAccessor implements MouseInfoAccessor
     {
         WinDef.POINT point = new WinDef.POINT();
         User32.INSTANCE.GetCursorPos(point);
+
+        System.out.println(new Point(point.x, point.y));
+
         return new Point(point.x, point.y);
     }
 }

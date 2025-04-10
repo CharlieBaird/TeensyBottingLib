@@ -1,5 +1,6 @@
 package com.TeensyBottingLib;
 
+import com.TeensyBottingLib.MouseFactories.AsyncMouseMotion;
 import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyNoOvershootAbsoluteMotionFactory;
 import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyNoOvershootRelativeMotionFactory;
 import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyOvershootAbsoluteMotionFactory;
@@ -18,8 +19,15 @@ public class MouseMotionHandler
         this.relativeLocationFactory = new TeensyNoOvershootRelativeMotionFactory(teensyIO);
     }
 
+    public void abortCurrentMovementIfExists()
+    {
+        AsyncMouseMotion.abortMovement();
+    }
+
     public void mouseMoveGeneralLocation(int x, int y)
     {
+        abortCurrentMovementIfExists();
+
         try {
             generalLocationFactory.move(x, y);
         } catch (InterruptedException e) {
@@ -29,6 +37,8 @@ public class MouseMotionHandler
 
     public void mouseMoveExactLocation(int x, int y)
     {
+        abortCurrentMovementIfExists();
+
         try {
             exactLocationFactory.move(x, y);
         } catch (InterruptedException e) {

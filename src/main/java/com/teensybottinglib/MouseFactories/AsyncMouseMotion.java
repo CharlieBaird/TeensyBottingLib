@@ -14,19 +14,49 @@ import java.util.Random;
 
 public class AsyncMouseMotion extends MouseMotion
 {
+    private static boolean movementCanceled = false;
+    private static boolean currentlyMoving = false;
+
     public AsyncMouseMotion(MouseMotionNature nature, Random random, int xDest, int yDest)
     {
         super(nature, random, xDest, yDest);
     }
 
+    public static void abortMovement()
+    {
+        if (!currentlyMoving) return;
+
+        movementCanceled = true;
+
+        // Block thread until not currently moving
+        while (currentlyMoving) {
+            System.out.println("Waiting for movement to abort");
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        System.out.println("Movement aborted");
+
+        movementCanceled = false;
+    }
+
     @Override
-    public void move(MouseMotionObserver observer) throws InterruptedException {
+    public void move(MouseMotionObserver observer) throws InterruptedException
+    {
+        // Blocker boolean
+        currentlyMoving = true;
+
         updateMouseInfo();
 
         MovementFactory movementFactory = new MovementFactory(xDest, yDest, speedManager, overshootManager, screenSize);
         ArrayDeque<Movement> movements = movementFactory.createMovements(mousePosition);
         int overshoots = movements.size() - 1;
-        while (mousePosition.x != xDest || mousePosition.y != yDest) {
+        while (!movementCanceled && (mousePosition.x != xDest || mousePosition.y != yDest)) {
+            System.out.println("Here");
+
             if (movements.isEmpty()) {
                 // This shouldn't usually happen, but it's possible that somehow we won't end up on the target,
                 // Then just re-attempt from mouse new position. (There are known JDK bugs, that can cause sending the cursor
@@ -63,6 +93,12 @@ public class AsyncMouseMotion extends MouseMotion
             double noiseY = 0;
 
             for (int i = 0; i < steps; i++) {
+
+                System.out.println("Stepping");
+                if (movementCanceled) {
+                    break;
+                }
+
                 // All steps take equal amount of time. This is a value from 0...1 describing how far along the process is.
                 double timeCompletion = i / (double) steps;
 
@@ -118,20 +154,25 @@ public class AsyncMouseMotion extends MouseMotion
             }
             updateMouseInfo();
 
-            if (mousePosition.x != movement.destX || mousePosition.y != movement.destY) {
-                // It's possible that mouse is manually moved or for some other reason.
-                // Let's start next step from pre-calculated location to prevent errors from accumulating.
-                // But print warning as this is not expected behavior.
-                systemCalls.setMousePosition(movement.destX, movement.destY);
-                // Let's wait a bit before getting mouse info.
-                sleepAround(SLEEP_AFTER_ADJUSTMENT_MS, 0);
-                updateMouseInfo();
-            }
+            if (!movementCanceled)
+            {
+                if (mousePosition.x != movement.destX || mousePosition.y != movement.destY) {
+                    // It's possible that mouse is manually moved or for some other reason.
+                    // Let's start next step from pre-calculated location to prevent errors from accumulating.
+                    // But print warning as this is not expected behavior.
+                    systemCalls.setMousePosition(movement.destX, movement.destY);
+                    // Let's wait a bit before getting mouse info.
+                    sleepAround(SLEEP_AFTER_ADJUSTMENT_MS, 0);
+                    updateMouseInfo();
+                }
 
-            if (mousePosition.x != xDest || mousePosition.y != yDest) {
-                // We are dealing with overshoot, let's sleep a bit to simulate human reaction time.
-                sleepAround(reactionTimeBaseMs, reactionTimeVariationMs);
+                if (mousePosition.x != xDest || mousePosition.y != yDest) {
+                    // We are dealing with overshoot, let's sleep a bit to simulate human reaction time.
+                    sleepAround(reactionTimeBaseMs, reactionTimeVariationMs);
+                }
             }
         }
+
+        currentlyMoving = false;
     }
 }
