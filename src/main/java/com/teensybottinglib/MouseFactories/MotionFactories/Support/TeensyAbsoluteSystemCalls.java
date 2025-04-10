@@ -1,4 +1,4 @@
-package com.TeensyBottingLib.MouseFactories.Support;
+package com.TeensyBottingLib.MouseFactories.MotionFactories.Support;
 
 import com.TeensyBottingLib.TeensyIO;
 

@@ -1,8 +1,8 @@
 package com.TeensyBottingLib;
 
-import com.TeensyBottingLib.MouseFactories.TeensyNoOvershootAbsoluteMotionFactory;
-import com.TeensyBottingLib.MouseFactories.TeensyNoOvershootRelativeMotionFactory;
-import com.TeensyBottingLib.MouseFactories.TeensyOvershootAbsoluteMotionFactory;
+import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyNoOvershootAbsoluteMotionFactory;
+import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyNoOvershootRelativeMotionFactory;
+import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyOvershootAbsoluteMotionFactory;
 import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
 
 public class MouseMotionHandler

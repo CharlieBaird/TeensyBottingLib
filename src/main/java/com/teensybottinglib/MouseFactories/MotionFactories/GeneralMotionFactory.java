@@ -1,5 +1,6 @@
-package com.TeensyBottingLib.MouseFactories;
+package com.TeensyBottingLib.MouseFactories.MotionFactories;
 
+import com.github.joonasvali.naturalmouse.api.MouseMotion;
 import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
 import com.github.joonasvali.naturalmouse.support.*;
 import com.github.joonasvali.naturalmouse.util.FlowTemplates;
@@ -30,5 +31,13 @@ public abstract class GeneralMotionFactory extends MouseMotionFactory
 
         DefaultOvershootManager overshootManager = (DefaultOvershootManager) getOvershootManager();
         overshootManager.setOvershoots(0);
+    }
+
+    @Override
+    public MouseMotion build(int xDest, int yDest)
+    {
+        System.out.println("Here");
+
+        return null;
     }
 }
