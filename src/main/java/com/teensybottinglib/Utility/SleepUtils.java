@@ -50,7 +50,7 @@ public class SleepUtils
 
         long sleepTime = minMillis + (long)((maxMillis - minMillis) * clamp(r, 0.0, 1.0));
 
-        System.out.println("Min: " + minMillis + ", Max: " + maxMillis + ", Sleep: " + sleepTime);
+//        System.out.println("Min: " + minMillis + ", Max: " + maxMillis + ", Sleep: " + sleepTime);
 
         try {
             Thread.sleep(sleepTime);

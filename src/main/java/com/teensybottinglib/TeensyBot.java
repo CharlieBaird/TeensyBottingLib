@@ -7,6 +7,7 @@ import com.TeensyBottingLib.Utility.SleepUtils;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TeensyBot
 {
@@ -46,7 +47,16 @@ public class TeensyBot
 
     public void mouseMoveGeneralLocation(Point p)
     {
-        mouseMotionHandler.mouseMoveGeneralLocation(p.x, p.y);
+        mouseMoveGeneralLocation(p, 10);
+    }
+
+    public void mouseMoveGeneralLocation(Point p, int proximity)
+    {
+        int offsetX = ThreadLocalRandom.current().nextInt(-1 * proximity, proximity + 1); // -proximity to +proximity inclusive
+        int offsetY = ThreadLocalRandom.current().nextInt(-1 * proximity, proximity + 1); // i.e. +- 10 pixels x/y from origin
+
+        Point randomizedPoint = new Point(p.x + offsetX, p.y + offsetY);
+        mouseMotionHandler.mouseMoveGeneralLocation(randomizedPoint.x, randomizedPoint.y);
     }
 
     public void mouseMoveExactLocation(Point p)
@@ -95,17 +105,29 @@ public class TeensyBot
         }
     }
 
+    public void mouseClickOnceOrTwice(MouseCode mouseCode)
+    {
+        double rand = ThreadLocalRandom.current().nextDouble();
+        int result = rand < 0.7 ? 1 : 2;
+
+        for (int i=0; i<result; i++)
+        {
+            mouseClick(mouseCode);
+            SleepUtils.delayAround(250);
+        }
+    }
+
     public void mousePress(MouseCode mouseCode)
     {
         String serial = mouseCode.getSerialValue();
         if (!HeldMouseClicks.contains(mouseCode)) {
-            System.out.println("Pressing " + serial);
+//            System.out.println("Pressing " + serial);
             HeldMouseClicks.add(mouseCode);
             teensy.mousePress(serial);
         }
         else
         {
-            System.out.println("Already pressing " + serial);
+//            System.out.println("Already pressing " + serial);
         }
     }
 
@@ -113,12 +135,12 @@ public class TeensyBot
     {
         String serial = mouseCode.getSerialValue();
         if (HeldMouseClicks.contains(mouseCode)) {
-            System.out.println("Releasing " + serial);
+//            System.out.println("Releasing " + serial);
             HeldMouseClicks.remove(mouseCode);
             teensy.mouseRelease(serial);
         }
         else {
-            System.out.println("Cannot release " + serial);
+//            System.out.println("Cannot release " + serial);
         }
     }
 
