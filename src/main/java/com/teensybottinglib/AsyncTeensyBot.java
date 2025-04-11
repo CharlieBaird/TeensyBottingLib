@@ -28,8 +28,6 @@ public class AsyncTeensyBot
 
     private void run(Runnable task, boolean async)
     {
-        System.out.println("Queued");
-
         if (async) {
             executor.submit(task);
         } else {
@@ -54,9 +52,9 @@ public class AsyncTeensyBot
         run(() -> bot.mouseMoveExactLocation(p), async);
     }
 
-    public void mouseMoveRelative(Point p, boolean async)
+    public void mouseMoveRelative(Point p)
     {
-        run(() -> bot.mouseMoveRelative(p), async);
+        run(() -> bot.mouseMoveRelative(p), false);
     }
 
     public void mouseClick(MouseCode code, boolean async)

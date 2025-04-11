@@ -4,13 +4,12 @@ import com.TeensyBottingLib.MouseFactories.AsyncMouseMotion;
 import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyNoOvershootAbsoluteMotionFactory;
 import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyNoOvershootRelativeMotionFactory;
 import com.TeensyBottingLib.MouseFactories.MotionFactories.TeensyOvershootAbsoluteMotionFactory;
-import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
 
 public class MouseMotionHandler
 {
-    private final MouseMotionFactory generalLocationFactory;
-    private final MouseMotionFactory exactLocationFactory;
-    private final MouseMotionFactory relativeLocationFactory;
+    private final TeensyNoOvershootAbsoluteMotionFactory generalLocationFactory;
+    private final TeensyOvershootAbsoluteMotionFactory exactLocationFactory;
+    private final TeensyNoOvershootRelativeMotionFactory relativeLocationFactory;
 
     public MouseMotionHandler(TeensyIO teensyIO)
     {

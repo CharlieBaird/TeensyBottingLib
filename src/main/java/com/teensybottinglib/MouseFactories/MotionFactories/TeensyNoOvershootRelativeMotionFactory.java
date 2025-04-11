@@ -1,8 +1,10 @@
 package com.TeensyBottingLib.MouseFactories.MotionFactories;
 
+import com.TeensyBottingLib.MouseFactories.AsyncMouseMotion;
 import com.TeensyBottingLib.MouseFactories.MotionFactories.Support.TeensyRelativeMouseAccessor;
 import com.TeensyBottingLib.MouseFactories.MotionFactories.Support.TeensyRelativeSystemCalls;
 import com.TeensyBottingLib.TeensyIO;
+import com.github.joonasvali.naturalmouse.api.MouseMotion;
 import com.github.joonasvali.naturalmouse.support.DefaultOvershootManager;
 import com.github.joonasvali.naturalmouse.support.DefaultSpeedManager;
 
@@ -23,5 +25,11 @@ public class TeensyNoOvershootRelativeMotionFactory extends GeneralTeensyMotionF
         DefaultSpeedManager manager = new DefaultSpeedManager(flows);
         manager.setMouseMovementBaseTimeMs(150);
         setSpeedManager(manager);
+    }
+
+    @Override
+    public MouseMotion build(int xDest, int yDest)
+    {
+        return new MouseMotion(getNature(), getRandom(), xDest, yDest);
     }
 }

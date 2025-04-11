@@ -27,7 +27,7 @@ public abstract class GeneralMotionFactory extends MouseMotionFactory
         getNature().setReactionTimeVariationMs(0);
 
         DefaultSpeedManager manager = new DefaultSpeedManager(flows);
-        manager.setMouseMovementBaseTimeMs(350);
+        manager.setMouseMovementBaseTimeMs(400);
         setSpeedManager(manager);
 
         DefaultOvershootManager overshootManager = (DefaultOvershootManager) getOvershootManager();
@@ -35,7 +35,7 @@ public abstract class GeneralMotionFactory extends MouseMotionFactory
     }
 
     @Override
-    public AsyncMouseMotion build(int xDest, int yDest)
+    public MouseMotion build(int xDest, int yDest)
     {
         return new AsyncMouseMotion(getNature(), getRandom(), xDest, yDest);
     }
