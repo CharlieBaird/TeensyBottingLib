@@ -2,6 +2,7 @@ package com.TeensyBottingLib;
 
 import com.TeensyBottingLib.InputCodes.KeyCode;
 import com.TeensyBottingLib.InputCodes.MouseCode;
+import com.TeensyBottingLib.MouseFactories.AsyncMouseMotion;
 import com.TeensyBottingLib.Utility.Timer;
 
 import java.awt.Point;
@@ -26,6 +27,17 @@ public class AsyncTeensyBot
         }));
     }
 
+    private void runBlocking(Runnable task, boolean async)
+    {
+        // Need to run this synchronously
+        if (async)
+        {
+            AsyncMouseMotion.abortMovement();
+        }
+
+        run(task, async);
+    }
+
     private void run(Runnable task, boolean async)
     {
         if (async) {
@@ -39,17 +51,17 @@ public class AsyncTeensyBot
 
     public void mouseMoveGeneralLocation(Point p, boolean async)
     {
-        run(() -> bot.mouseMoveGeneralLocation(p), async);
+        runBlocking(() -> bot.mouseMoveGeneralLocation(p), async);
     }
 
     public void mouseMoveGeneralLocation(Point p, int proximity, boolean async)
     {
-        run(() -> bot.mouseMoveGeneralLocation(p, proximity), async);
+        runBlocking(() -> bot.mouseMoveGeneralLocation(p, proximity), async);
     }
 
     public void mouseMoveExactLocation(Point p, boolean async)
     {
-        run(() -> bot.mouseMoveExactLocation(p), async);
+        runBlocking(() -> bot.mouseMoveExactLocation(p), async);
     }
 
     public void mouseMoveRelative(Point p)

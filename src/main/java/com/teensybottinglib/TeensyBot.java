@@ -5,8 +5,10 @@ import com.TeensyBottingLib.InputCodes.MouseCode;
 import com.TeensyBottingLib.Utility.SleepUtils;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TeensyBot
@@ -18,8 +20,9 @@ public class TeensyBot
     {
         teensy = new TeensyIO();
         mouseMotionHandler = new MouseMotionHandler(teensy);
-        HeldKeys = new HashSet<>();
-        HeldMouseClicks = new HashSet<>();
+
+        HeldKeys = Collections.synchronizedSet(new HashSet<>());
+        HeldMouseClicks = Collections.synchronizedSet(new HashSet<>());
 
         // Make sure snippet runs to close connection to Teensy
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -27,20 +30,26 @@ public class TeensyBot
             System.out.println("Teensy connection closed");
 
             // Safety: unpress / unclick anything held down on a crash
-            for (KeyCode key : HeldKeys)
+            synchronized (HeldKeys)
             {
-                System.out.println("Exiting, releasing "+ key.getSerialValue());
-                SleepUtils.delayAround(40);
-                keyRelease(key);
-                SleepUtils.delayAround(40);
+                for (KeyCode key : HeldKeys)
+                {
+                    System.out.println("Exiting, releasing "+ key.getSerialValue());
+                    SleepUtils.delayAround(40);
+                    keyRelease(key);
+                    SleepUtils.delayAround(40);
+                }
             }
 
-            for (MouseCode key : HeldMouseClicks)
+            synchronized (HeldMouseClicks)
             {
-                System.out.println("Exiting, releasing "+ key.getSerialValue());
-                SleepUtils.delayAround(40);
-                mouseRelease(key);
-                SleepUtils.delayAround(40);
+                for (MouseCode key : HeldMouseClicks)
+                {
+                    System.out.println("Exiting, releasing "+ key.getSerialValue());
+                    SleepUtils.delayAround(40);
+                    mouseRelease(key);
+                    SleepUtils.delayAround(40);
+                }
             }
         }));
     }
@@ -71,6 +80,7 @@ public class TeensyBot
 
     private final Set<KeyCode> HeldKeys;
     private final Set<MouseCode> HeldMouseClicks;
+
 
     public void mouseClickForDuration(MouseCode mouseCode, int minDur, int maxDur)
     {
